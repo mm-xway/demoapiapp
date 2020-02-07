@@ -1,0 +1,128 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "trackercache",
+    "version": "1.0",
+    "description": "Tracker Cache API maintains frequently requested shipment tracking info",
+    "contact": {
+      "name": "Dev@Axway"
+    }
+  },
+  "host": "localhost:9081",
+  "schemes": [
+    "http"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "paths": {
+    "/trackercache": {
+      "get": {
+        "summary": "Get tracking info",
+        "tags": [],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "tracking_id": {
+                  "type": "string"
+                },
+                "status": {
+                  "type": "string"
+                },
+                "estimated_delivery": {
+                  "type": "string"
+                }
+              }
+            },
+            "examples": {
+              "Success": {
+                "tracking_id": "abc123",
+                "status": "In-Route",
+                "estimated_delivery": "23-01-2020 14:00:00:000"
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "type": "object",
+              "properties": {}
+            },
+            "examples": {
+              "Not Found": {
+                "reason": "requested id does not exist in the cache, use POST to add"
+              }
+            }
+          }
+        },
+        "operationId": "get-trackercache:id",
+        "description": "returns the tracking info for the requested id if present in the cache",
+        "parameters": [
+          {
+            "type": "string",
+            "in": "query",
+            "name": "id"
+          }
+        ],
+        "x-flow": "trackercache-getTrackercache"
+      },
+      "parameters": [],
+      "post": {
+        "summary": "Add tracking info to the cache",
+        "operationId": "post-trackercache",
+        "description": "Add Tracking info to the cache",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "tracking_id": {
+                  "type": "string"
+                },
+                "delivery_service": {
+                  "type": "string"
+                },
+                "status": {
+                  "type": "string"
+                },
+                "estimated_delivery": {
+                  "type": "string"
+                }
+              }
+            },
+            "x-examples": {
+              "Tracking info": {
+                "tracking_id": "abc123",
+                "delivery_service": "FedEx",
+                "estimated_delivery": "14-01-2020 14:00:00:000",
+                "status": "In-route"
+              }
+            },
+            "description": "Add tracking info to the cache, use JSON object as shown in the example."
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created",
+            "schema": {
+              "type": "object",
+              "properties": {}
+            },
+            "examples": {}
+          }
+        },
+        "x-flow": "trackercache-post-trackercache"
+      }
+    }
+  },
+  "definitions": {},
+  "securityDefinitions": {}
+}
